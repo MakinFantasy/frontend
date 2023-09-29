@@ -31,10 +31,11 @@ import {
 
     USER_UPDATE_REQUEST,
     USER_UPDATE_SUCCESS,
-    USER_UPDATE_FAIL,
+    USER_UPDATE_FAIL, USER_WEAK_PASSWORD,
 
 } from '../constants/userConstants'
 import { variables } from './../utils/variables';
+import validator from 'validator'
 
 
 export const login = (email, password) => async (dispatch) => {
@@ -79,44 +80,58 @@ export const logout = () => (dispatch) => {
 }
 
 
-export const register = (name, email, password) => async (dispatch) => {
-    try {
-        dispatch({
-            type: USER_REGISTER_REQUEST
-        })
+export const register = (name, email, password) => async (dispatch, getState) => {
+        if (validator.isStrongPassword(password, {
+            minLength:6, minLowercase:1, minUppercase:1,
+            minNumbers:1, minSymbols:1
+        })) {
+            try {
+                dispatch({
+                    type: USER_REGISTER_REQUEST
+                })
 
-        const config = {
-            headers: {
-                'Content-type': 'application/json'
+                const config = {
+                    headers: {
+                        'Content-type': 'application/json'
+                    }
+                }
+
+                const { data } = await axios.post(
+                    variables.API_URL + 'users/register/',
+                    { 'name': name, 'email': email, 'password': password },
+                    config
+                )
+
+                dispatch({
+                    type: USER_REGISTER_SUCCESS,
+                    payload: data
+                })
+
+                dispatch({
+                    type: USER_LOGIN_SUCCESS,
+                    payload: data
+                })
+
+                const {
+                    userLogin: { userInfo },
+                } = getState()
+
+                localStorage.setItem('userInfo', JSON.stringify(data))
+                localStorage.setItem('token', userInfo.token)
+
+            } catch (error) {
+                dispatch({
+                    type: USER_REGISTER_FAIL,
+                    payload: error.response && error.response.data.detail
+                        ? error.response.data.detail
+                        : error.message,
+                })
             }
+        } else {
+            dispatch({
+                type: USER_WEAK_PASSWORD,
+            })
         }
-
-        const { data } = await axios.post(
-            variables.API_URL + 'users/register/',
-            { 'name': name, 'email': email, 'password': password },
-            config
-        )
-
-        dispatch({
-            type: USER_REGISTER_SUCCESS,
-            payload: data
-        })
-
-        dispatch({
-            type: USER_LOGIN_SUCCESS,
-            payload: data
-        })
-
-        localStorage.setItem('userInfo', JSON.stringify(data))
-
-    } catch (error) {
-        dispatch({
-            type: USER_REGISTER_FAIL,
-            payload: error.response && error.response.data.detail
-                ? error.response.data.detail
-                : error.message,
-        })
-    }
 }
 
 
