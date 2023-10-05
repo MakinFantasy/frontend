@@ -114,7 +114,7 @@ const AddFile = () => {
                                 type="text"
                                 placeholder="name of file"
                                 defaultValue={file_name}
-                                readOnly={true}
+                                readOnly={false}
                             />
 
                             <InputGroup className="rounded-xl ">

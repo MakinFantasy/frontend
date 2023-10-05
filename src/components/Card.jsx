@@ -9,6 +9,7 @@ import 'tippy.js/dist/tippy.css';
 import { variables } from './../utils/variables';
 import axios from 'axios';
 
+
 function Card({ props }) {
 
     // Split the string name of file
@@ -88,11 +89,10 @@ function Card({ props }) {
                         }}> */}
                         {/* <img className='h-10 w-10 rounded-xl' src={download_file} alt='download file' /> */}
                         {/* </button> */}
-                        <a href={`${variables.STATIC_URL}${props.file_file}`} target='_blank' download>
+                        <a href={`${variables.STATIC_URL}${props.uuid}`} target='_blank' download>
                             <img className='h-10 w-10 rounded-xl' src={download_file} alt='download file' />
                         </a>
                     </Tippy>
-
                 </div>
             </div>
         </div >

@@ -81,11 +81,17 @@ function DetailFile() {
                                     </p>
                                     <p className="card-text mb-3">
                                         <span className='text-sm font-bold text-white bg-[#686868] mb-2'>
+                                            Link for share:<br />
+                                        </span>{variables.DOWNLOAD_URL}{file.uuid}
+
+                                    </p>
+                                    <p className="card-text mb-3">
+                                        <span className='text-sm font-bold text-white bg-[#686868] mb-2'>
                                             Date of creation: <br />
                                         </span>{new Date(file.create_at).toLocaleString('ru')}
                                     </p>
                                     <hr />
-                                    <div className='mt-3 flex justify-center'>
+                                    <div className='mt-3 flex justify-left'>
                                         <button type="button" onClick={(e) => handleDelete(file.id)}
                                             className="btn btn-outline-danger btn-sm">
                                             <span className="bi bi-trash mr-2"></span>

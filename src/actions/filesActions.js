@@ -129,6 +129,38 @@ export const getDetailFile = (id) => async (dispatch, getState) => {
     }
 }
 
+export const createShareLink = (uuid) => async(dispatch, getState) => {
+
+    try {
+        dispatch({ type: DETAIL_FILES_REQUEST })
+        const {
+            userLogin: { userInfo },
+        } = getState()
+
+        const config = {
+            headers: {
+                'Content-type': 'application/json',
+                Authorization: `Bearer ${userInfo.token}`
+            }
+        }
+        const { data } = await axios.get(
+            `${variables.API_URL}files/share/${uuid}`,
+            config
+        );
+        dispatch({
+            type: DETAIL_FILES_SUCCESS,
+            payload: data
+        })
+    } catch (error) {
+        dispatch({
+            type: DETAIL_FILES_FAIL,
+            payload: error.response && error.response.data.detail
+                ? error.response.data.detail
+                : error.message,
+        })
+    }
+
+}
 
 // Update of File
 export const updateFile = (id, fileData) => async (dispatch, getState) => {
