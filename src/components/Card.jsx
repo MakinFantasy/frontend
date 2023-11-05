@@ -89,7 +89,7 @@ function Card({ props }) {
                         }}> */}
                         {/* <img className='h-10 w-10 rounded-xl' src={download_file} alt='download file' /> */}
                         {/* </button> */}
-                        <a href={`${variables.STATIC_URL}${props.uuid}`} target='_blank' download>
+                        <a href={`${variables.DOWNLOAD_URL}${props.uuid}`} target='_blank' download>
                             <img className='h-10 w-10 rounded-xl' src={download_file} alt='download file' />
                         </a>
                     </Tippy>
